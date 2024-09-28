@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Web Của Tôi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('https://example.com/background.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .tabs { display: flex; cursor: pointer; margin-bottom: 50px; }
+        .tab { padding: 30px 20px; border: 3px solid #ccc; border-bottom: none; background: rgba(71, 37, 224, 0.8); }
+        .content {
+            padding: 20px;
+            border: 1px solid #ccc;
+            background: rgba(252, 250, 250, 0.8);
+        }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="tabs">
+    <div class="tab" onclick="showContent('home')">Home</div>
+    <div class="tab" onclick="showContent('about')">About</div>
+    <div class="tab" onclick="showContent('labs')">Labs</div>
+</div>
+
+<div id="home" class="content">Chào mừng đến với trang Home!</div>
+<div id="about" class="content hidden">Thông tin về chúng tôi.</div>
+<div id="labs" class="content hidden">Thông tin về Labs.</div>
+
+<script>
+    function showContent(tab) {
+        const contents = document.querySelectorAll('.content');
+        contents.forEach(content => {
+            content.classList.add('hidden');
+        });
+        document.getElementById(tab).classList.remove('hidden');
+    }
+</script>
+
+</body>
+</html>
