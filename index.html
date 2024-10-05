@@ -70,20 +70,192 @@
 <div id="about" class="content hidden">Thông tin về chúng tôi.</div>
 <div id="labs" class="content hidden">Thông tin về Labs.
     <div id="labs">
-    <h1>MENU</h1>
-    <ul>
-      <li>
-       
-        <a href="./lab2.html"
-          ><i class=""></i>lab2</a>
-
-          <a href="./lab1.html"
-          ><i class=""></i>lab1</a
-        >
-        
-        </li>
-        </ul>
-      
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                padding: 20px;
+            }
+            .form-container {
+                background: #fff;
+                padding: 20px;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                max-width: 500px;
+                margin: auto;
+            }
+            .form-group {
+                margin-bottom: 15px;
+            }
+            label {
+                display: block;
+                margin-bottom: 5px;
+            }
+            input[type="text"], input[type="email"], input[type="password"], select {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+            .error {
+                color: red;
+                font-size: 12px;
+            }
+            button {
+                padding: 10px 15px;
+                border: none;
+                border-radius: 4px;
+                color: white;
+                background-color: #28a745;
+                cursor: pointer;
+                margin-right: 10px;
+            }
+            button:disabled {
+                background-color: #ccc;
+            }
+            .cancel-button {
+                background-color: #dc3545;
+            }
+            .preview {
+                max-width: 100%;
+                margin-top: 10px;
+            }
+            @media (max-width: 600px) {
+                .form-container {
+                    padding: 15px;
+                }
+                button {
+                    width: 100%;
+                    margin: 5px 0;
+                }
+            }
+        </style>
+    </head>
+    <body>
+    
+    <div class="form-container">
+        <h2>Create Account</h2>
+        <form id="registrationForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter your username." required>
+                <div class="error" id="usernameError"></div>
+            </div>
+    
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password." required>
+                <button type="button" onclick="togglePassword()">Show/Hide</button>
+                <div class="error" id="passwordError"></div>
+            </div>
+    
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="Enter your email." required>
+                <div class="error" id="emailError"></div>
+            </div>
+    
+            <div class="form-group">
+                <label for="fullName">Full Name (optional)</label>
+                <input type="text" id="fullName" placeholder="Enter your full name.">
+            </div>
+    
+            <div class="form-group">
+                <label for="role">Role</label>
+                <select id="role" required>
+                    <option value="">Select your role</option>
+                    <option value="Admin">Admin</option>
+                    <option value="User">User</option>
+                    <!-- Additional roles can be added here -->
+                </select>
+                <div class="error" id="roleError"></div>
+            </div>
+    
+            <div class="form-group">
+                <label for="profilePicture">Profile Picture</label>
+                <input type="file" id="profilePicture" accept="image/*" onchange="previewImage(event)">
+                <input type="text" id="imageUrl" placeholder="Or enter image URL." oninput="updateImagePreview()">
+                <img id="preview" class="preview" alt="Image Preview" style="display:none;" />
+            </div>
+    
+            <div class="form-group">
+                <label>Account Created At</label>
+                <p id="accountCreatedAt"></p>
+            </div>
+    
+            <div class="form-group">
+                <label>Last Updated At</label>
+                <p id="lastUpdatedAt"></p>
+            </div>
+    
+            <button type="submit" id="submitButton" disabled>Create Account</button>
+            <button type="button" class="cancel-button" onclick="cancelForm()">Cancel</button>
+        </form>
+    </div>
+    
+    <script>
+        const togglePassword = () => {
+            const passwordField = document.getElementById('password');
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+        };
+    
+        const cancelForm = () => {
+            window.history.back();
+        };
+    
+        const previewImage = (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('preview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        };
+    
+        const updateImagePreview = () => {
+            const imageUrl = document.getElementById('imageUrl').value;
+            const preview = document.getElementById('preview');
+            if (imageUrl) {
+                preview.src = imageUrl;
+                preview.style.display = 'block';
+            } else {
+                preview.style.display = 'none';
+            }
+        };
+    
+        document.getElementById('registrationForm').addEventListener('input', () => {
+            validateForm();
+        });
+    
+        const validateForm = () => {
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const role = document.getElementById('role').value;
+            const password = document.getElementById('password').value;
+    
+            const isValidUsername = username.length > 0; // Add more validation if needed
+            const isValidEmail = /\S+@\S+\.\S+/.test(email); // Basic email format check
+            const isValidRole = role.length > 0;
+            const isValidPassword = password.length >= 8; // Simple strength check
+    
+            document.getElementById('usernameError').textContent = isValidUsername ? '' : 'Username is required.';
+            document.getElementById('emailError').textContent = isValidEmail ? '' : 'Invalid email format.';
+            document.getElementById('roleError').textContent = isValidRole ? '' : 'Role is required.';
+            document.getElementById('passwordError').textContent = isValidPassword ? '' : 'Password must be at least 8 characters.';
+    
+            document.getElementById('submitButton').disabled = !(isValidUsername && isValidEmail && isValidRole && isValidPassword);
+        };
+    
+        // Initialize account created and last updated timestamps
+        document.getElementById('accountCreatedAt').textContent = new Date().toLocaleString();
+        document.getElementById('lastUpdatedAt').textContent = new Date().toLocaleString();
+    </script>
+    
 </div>
 
 <script>
